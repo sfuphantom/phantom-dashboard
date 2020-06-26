@@ -1,0 +1,20 @@
+#: kivy 1.11.1
+
+<BatteryVolt>:
+    anchor_x: 'right'
+    anchor_y: 'top'
+    padding: [10, 0]
+    BoxLayout: 
+        orientation: 'vertical'
+        size_hint: (None, None)
+        canvas.before:
+            Color:
+                rgba: 1, 1, 1, 1
+            Line:
+                width: 2.0 
+                rectangle: self.x - self.width - 50, self.y, 250, 75
+        BoxLayout:
+            Label: 
+                size: self.texture_size
+                pos_hint: {'x': 0.8, 'y': -0.70}
+                text: 'BATT. VOLT.'
