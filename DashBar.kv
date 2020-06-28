@@ -1,11 +1,21 @@
 #: kivy 1.11.1
 
-<DashBar@AnchorLayout>:
+<AboutDialog>:
+    Label: 
+        text: 'Hello, World!'
+
+
+<DashBar>:
     anchor_x: 'center'
     anchor_y: 'bottom'
     ActionBar:
+        background_color: (int(190/255), 0, int(193/255), 1)
         ActionView:
             ActionPrevious:
+                title: 'Phantom Dashboard'
+                app_icon: 'assets/phantom_logo.png'
+                with_previous: False
             ActionOverflow:
             ActionButton: 
-                text: 'DEBUG'
+                text: 'About'
+                on_release: root.show_about_dialog()
