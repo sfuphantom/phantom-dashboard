@@ -32,7 +32,6 @@ class Faults(AnchorLayout):
 class AboutDialog(BoxLayout):
     pass
 
-
 class DashBar(AnchorLayout):
     def show_about_dialog(self):
         popup = AboutDialog()
