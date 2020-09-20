@@ -1,4 +1,5 @@
 #: kivy 1.11.1
+#:import hex kivy.utils.get_color_from_hex
 
 <BatteryTemp>:
     anchor_x: 'left'
@@ -7,14 +8,31 @@
     BoxLayout: 
         orientation: 'vertical'
         size_hint: (None, None)
-        canvas.before:
-            Color:
-                rgba: 1, 1, 1, 1
+        canvas.before:                
             Line:
                 width: 2.0 
                 rectangle: self.x, self.y, 250, 75
-        BoxLayout:
-            Label: 
-                size: self.texture_size
-                pos_hint: {'x': 0.8, 'y': -0.70}
-                text: 'BATT. TEMP.'
+        Button:
+            background_color: (1, 0, 0, 1)
+            on_release:
+                root.animate_the_button(self)
+        Button:
+            background_color: (1, 0, 0, 1)
+            on_release:
+                root.animate_the_button(self)
+        Button:
+            background_color: hex('#fcf403')
+            on_release:
+                root.animate_the_button(self)
+        Button:
+            background_color: hex('#fcf403')
+            on_release:
+                root.animate_the_button(self)
+        Button:
+            background_color: (0, 1, 0, 1)
+            on_release:
+                root.animate_the_button(self)
+        Button:
+            background_color: (0, 1, 0, 1)
+            on_release:
+                root.animate_the_button(self)
