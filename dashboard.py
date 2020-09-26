@@ -96,7 +96,7 @@ class DashboardApp(App):
         return Dashboard()
 
     def on_start(self):
-
+        
         def on_connect(client, userdata, flags, rc):
             print("Connected with result code "+str(rc))
 
