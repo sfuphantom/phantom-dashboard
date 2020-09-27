@@ -1,4 +1,5 @@
 #: kivy 1.11.1
+#:import Gauge kivy.garden.gauge
 
 <VehicleSpeed>:
     anchor_x: 'center'
@@ -6,7 +7,9 @@
     BoxLayout:
         orientation: 'vertical'
         size_hint: (None, None)
+        #Gauge:
+	    	#pos_hint: {'x': 0.5, 'y':0.5}
+	    	#size_hint: (0.5,0.5)
         Label: 
-
             font_size: '86sp'
             text: app.speed

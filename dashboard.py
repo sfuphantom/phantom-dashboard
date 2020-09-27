@@ -1,11 +1,13 @@
 import kivy
+from kivy.garden.gauge import Gauge
 kivy.require('1.11.1')
 
 from kivy.app import App
-from kivy.properties import ObjectProperty, StringProperty
+from kivy.properties import ObjectProperty, StringProperty, NumericProperty
 from kivy.uix.label import Label
 from kivy.uix.anchorlayout import AnchorLayout
 from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.textinput import TextInput
 from kivy.uix.widget import Widget
 from kivy.uix.button import Button
@@ -18,31 +20,13 @@ import paho.mqtt.client as mqtt
 from threading import Thread
 from time import sleep
 
-class backendComms():
-    def __init__(self):
-        self.client = mqtt.Client()
-        self.client.on_connect = self.on_connect
-        self.client.on_message = self.on_message
-
-        self.client.connect("localhost", 1883, 60)
-
-        self.client.loop_start()
-
-    def on_connect(self, client, userdata, flags, rc):
-        print("Connected with result code "+str(rc))
-
-        # Subscribing in on_connect() means that if we lose the connection and
-        # reconnect then subscriptions will be renewed.
-        self.client.subscribe("events/batteryVoltage")
-        self.client.subscribe("events/batteryTemperature")
-        self.client.subscribe("events/vehicleSpeed")
-        self.client.subscribe("events/regen")
-        self.client.subscribe("events/faults")
-
-    # The callback for when a PUBLISH message is received from the server.
-    def on_message(self, client, userdata, msg):
-        print(msg.topic+" "+str(msg.payload)) 
-        dashboard.setSpeed(msg)  
+MQTT_TOPICS = {
+    "BATTERY_VOLTAGE_TOPIC": "events/batteryVoltage",
+    "BATTERY_TEMPERATURE_TOPIC": "events/batteryTemperature",
+    "VEHICLE_SPEED_TOPIC": "events/vehicleSpeed",
+    "BATTERY_REGEN_TOPIC": "events/batteryRegen",
+    "FAULTS_TOPIC": "events/faults",
+}
 
 class BatteryTemp(AnchorLayout):
     pass
@@ -77,8 +61,18 @@ class DashBar(AnchorLayout):
 class Dashboard(AnchorLayout):
     dashSize = ObjectProperty()
     test = ObjectProperty()
+    increasing = NumericProperty(1)
+    begin = NumericProperty(50)
+    step = NumericProperty(1)
     def __init__(self, **kwargs):
         super(Dashboard, self).__init__(**kwargs)
+
+        box = FloatLayout(size_hint=(1, 1))
+        self.gauge = Gauge(value=50, size_gauge=256, size_text=24, pos_hint={'x':0.335, 'y':0.25}, size_hint= (1, 1))
+
+        box.add_widget(self.gauge)
+        self.add_widget(box)
+        #Clock.schedule_interval(lambda *t: self.gauge_increment(), 0.1)
         #Clock.schedule_interval(self.cb, 1/10)
 
     # def on_touch_down(self, touch):
@@ -88,30 +82,51 @@ class Dashboard(AnchorLayout):
     def cb(self, *largs):
         print('Hello, World')
 
+    def gauge_increment(self):
+        begin = self.begin
+        begin += self.step * self.increasing
+        if begin > 0 and begin < 100:
+            self.gauge.value = begin
+        else:
+            self.increasing *= -1
+        self.begin = begin
+
 
 class DashboardApp(App):
     speed = StringProperty()        
     def build(self):
+        #Clock.schedule_interval(lambda *t: self.gauge_increment(), 0.1)
         print('Building Phantom Dashboard...')
-        return Dashboard()
+        self.dashboard = Dashboard()
+        return self.dashboard
 
-    def on_start(self):
-        
+    def on_start(self):      
         def on_connect(client, userdata, flags, rc):
             print("Connected with result code "+str(rc))
 
             # Subscribing in on_connect() means that if we lose the connection and
             # reconnect then subscriptions will be renewed.
-            client.subscribe("events/batteryVoltage")
-            client.subscribe("events/batteryTemperature")
-            client.subscribe("events/vehicleSpeed")
-            client.subscribe("events/regen")
-            client.subscribe("events/faults")
+            for key in MQTT_TOPICS.keys():
+                client.subscribe(MQTT_TOPICS[key])
 
         # The callback for when a PUBLISH message is received from the server.
         def on_message(client, userdata, msg):
             print(msg.topic+" "+str(msg.payload)) 
-            self.setSpeed(msg.payload.decode('utf-8')) 
+            topic = msg.topic
+            data = msg.payload
+
+            if topic == MQTT_TOPICS['BATTERY_VOLTAGE_TOPIC']:
+                self.setSpeed(data.decode('utf-8'))
+            elif topic == MQTT_TOPICS['BATTERY_TEMPERATURE_TOPIC']:
+                self.setSpeed(data.decode('utf-8'))
+            elif topic == MQTT_TOPICS['BATTERY_REGEN_TOPIC']:
+                self.setSpeed(data.decode('utf-8'))
+            elif topic == MQTT_TOPICS['VEHICLE_SPEED_TOPIC']:
+                self.setSpeed(data.decode('utf-8'))
+            elif topic == MQTT_TOPICS['FAULTS_TOPIC']:
+                self.setSpeed(data.decode('utf-8'))  
+            else:
+                print("Invalid topic " + msg.topic)           
 
         parameters = {'self': self}
 
@@ -124,7 +139,7 @@ class DashboardApp(App):
         client.loop_start()
 
     def setSpeed(self, speed):
-        self.speed = speed
+        self.dashboard.gauge.value = int(speed)
 
 
 #backend = backendComms()
