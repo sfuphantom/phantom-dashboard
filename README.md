@@ -34,7 +34,37 @@ Additionally, I would recommend using VS Code as your editor since there is a WS
 You will also need to install some sort of XServer to port the linux display to Windows 10. The best solution I've found is [MobaXTerm](https://mobaxterm.mobatek.net/) Which is a pretty nice terminal as well but we only really need one button from it.
 
 ### Prerequisites
+With Install script:
 
+After installing WSL or another form of Ubuntu 18.04, run the following command:
+
+` wget -O - https://raw.githubusercontent.com/sfuphantom/phantom-dashboard/master/setup.sh | sudo bash`
+
+`wget` downloads the setup script from the github repo, `|` is the pipe symbol and it will take the contents of the script and give it as an input to `sudo bash` so in the end the command kind of looks like:
+
+`sudo bash(Get_From_Internet(setup script))`
+                                                            
+The contents of this file just runs all the required commands to setup the environment which can be run manually:
+```
+#!/bin/bash
+apt-get update  # To get the latest package lists
+apt-get install python3.7 mosquitto mosquitto-clients python3-pip -y # Installs python3.7 and MQTT
+
+python3.7 -m pip install --upgrade --user pip setuptools virtualenv
+
+python3.7 -m virtualenv ~/kivy_venv # Creates virtual environment for kivy app
+
+source ~/kivy_venv/bin/activate # Activates environment
+which pip # Verifies it's using the correct pip from the virtual environment
+
+pip install kivy kivy-garden paho-mqtt # Installs required python packages
+garden install gauge # install kivy gauge from Kivy-Garden 
+
+git clone https://github.com/sfuphantom/phantom-dashboard.git ~/kivy_venv/phantom-dashboard
+```
+And it will setup all the required dependencies and clone this repo in the folder ~/kivy_venv, you may need to run "mosquitto" on the command line to start the MQTT server
+
+Installing dependencies manually:
 - **Python3.7.x**
 
   - To install this you can simply use ``` sudo apt install python3.7 ```
