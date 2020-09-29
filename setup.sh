@@ -11,4 +11,4 @@ which pip # Verifies it's using the correct pip from the virtual environment
 
 pip install kivy kivy-garden paho-mqtt # Installs required python packages
 
-git clone https://github.com/sfuphantom/phantom-dashboard.git ~/kivy_venv
+git clone https://github.com/sfuphantom/phantom-dashboard.git ~/kivy_venv/phantom-dashboard
