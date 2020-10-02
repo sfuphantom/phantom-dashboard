@@ -95,3 +95,56 @@ Finally, we can now install kivy into our virtual environment:
 
 4. ` $ python -m pip install kivy `
 
+### Software System Architecture
+![System Architecture](https://i.imgur.com/APBgW1K.png)
+
+Let's talk about our system architecture for the software running on the Raspberry Pi that encompasses both the dashboard and data acquisition. There are a couple of key elements here but the most important is MQTT which serves as the heart of the whole system. It fascillitates communication between the different applications that make up the dashboard so let's dive into that first.
+
+**MQTT**
+
+MQTT is a publish/subscribe protocol that is lightweight and requires a minimal footprint and bandwidth. MQTT is event driven and enables messages to be pushed to clients. This type of architecture decouples the clients from each other to enable a highly scalable solution without dependencies between data producers and data consumers.
+![MQTT](https://i.imgur.com/ZNx7iWl.png)
+
+What this means is that the different applications running on the pi don't need to know about each other, an application will publish a message to a topic and the broker will check what applications are subscribed to that topic and serve them with the message. It is event driven meaning you don't need your application to be waiting for a message, it can be operating normally and when it receives a message, it will momentarily pause, process the message, and go back to regular operation.
+In our software system, it is the main method of communication between the different applications ie. front-end is subscribed to vehicleSpeed, VCU back-end will receive a message from the microcontroller indicating a speed and will publish a message to vehicleSpeed.
+
+To install MQTT you need to run the following commands
+`sudo apt-get update
+sudo apt-get install mosquitto
+sudo apt-get install mosquitto-clients`
+
+To test, run `mosquitto` to launch the local broker and then run `mosquitto_sub -t "test"` which will subscribe you to the topic "test".
+In another terminal, run `mosquitto_pub -m "message from mosquitto_pub client" -t "test"` and you will see the message in the first terminal.
+
+**Backend**
+
+The backend will be a python application that communicates with the Vehicular Computer Unit and the Battery Management System over Controller Area Network (CAN) to receive data about battery level, faults, speed, regen, etc. It will receive that data, process it, and then publish the data to their unique topics such as vehicleSpeed, batteryRegen, batteryVoltage, etc.
+
+**Node-Red**
+
+Node-RED is a programming tool for wiring together hardware devices, APIs and online services in new and interesting ways. It provides a browser-based editor that makes it easy to wire together flows using the wide range of nodes in the palette that can be deployed to its runtime in a single-click. 
+
+It also provides a way to build a GUI very quickly and effectively which proves to be useful in visualizing data from our data acquisition application in real-time as well as provide a way to quickly create test applications due to its great MQTT integration. This means you could effectively fake any messages you would be getting from the Backend. We don't use it for the main dashboard GUI as it is served on a webpage meaning it's not quite as snappy as we would want for our driver.
+
+To install on a Linux system use the following command:
+`bash <(curl -sL https://raw.githubusercontent.com/node-red/linux-installers/master/deb/update-nodejs-and-nodered)`
+Instructions for other systems can be found here https://nodered.org/docs/getting-started/
+The current non-default Node-Red packages we use are: node-red-dashboard
+
+Let's go through an example of a simple Node-Red flow to simulate vehicle speed on the dashboard GUI:
+After installing node-red, we want to create a nice GUI to easily simulate the vehicle speed.
+First, let's launch node-red if it's not already running by running "node-red-start" on the command line and then we can visit the editor at http://localhost:1880.
+Second, we'll install the dashboard package to give us more nodes to work with.
+![dashboard package](https://i.imgur.com/YAbvxat.jpg)
+After doing that, the dashboard nodes will show up on the right and we'll insert a slider node with a range from 0 to 100.
+![slider](https://i.imgur.com/TaPGKWs.jpg)
+We'll set the group with just the defaults, specifiy the min as 0 and the max as 100 with a step of 1, and we'll set the topic to events/vehicleSpeed so any message coming out of the slider node will have that topic property.
+
+Then we'll add a MQTT out node to receive messages from the slider node and publish them to the topic that the Dashboard GUI is listening to.
+![mqttout](https://i.imgur.com/IJn7DFm.jpg)
+We'll leave all the defaults in the Server field except we'll add localhost as the server IP as we're using the internal MQTT broker. 
+Hit deploy and go to http://localhost:1880/ui and you can see our beautiful GUI!
+
+Now if we fire up the dashboard and move the slider around we'll see the speed gauge changing
+![nodereddashbord](https://i.imgur.com/DGHDZSN.jpg)
+Amazing, you can see how fast messages are sent over MQTT and we have just completed our first node-red flow. There are endless possibilities with this tool and thousands of nodes which enable you to accomplish a lot in much shorter time compared to traditional programming.
