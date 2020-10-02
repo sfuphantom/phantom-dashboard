@@ -109,9 +109,11 @@ What this means is that the different applications running on the pi don't need 
 In our software system, it is the main method of communication between the different applications ie. front-end is subscribed to vehicleSpeed, VCU back-end will receive a message from the microcontroller indicating a speed and will publish a message to vehicleSpeed.
 
 To install MQTT you need to run the following commands
-`sudo apt-get update
+```
+sudo apt-get update
 sudo apt-get install mosquitto
-sudo apt-get install mosquitto-clients`
+sudo apt-get install mosquitto-clients
+```
 
 To test, run `mosquitto` to launch the local broker and then run `mosquitto_sub -t "test"` which will subscribe you to the topic "test".
 In another terminal, run `mosquitto_pub -m "message from mosquitto_pub client" -t "test"` and you will see the message in the first terminal.
