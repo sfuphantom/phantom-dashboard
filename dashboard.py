@@ -1,5 +1,5 @@
 import kivy
-from kivy.garden.gauge import Gauge
+from kivy_garden.speedmeter import SpeedMeter
 kivy.require('1.11.1')
 
 from kivy.app import App
@@ -63,16 +63,10 @@ class Dashboard(AnchorLayout):
     test = ObjectProperty()
     increasing = NumericProperty(1)
     begin = NumericProperty(50)
-    step = NumericProperty(1)
+    step = NumericProperty(1) 
     def __init__(self, **kwargs):
         super(Dashboard, self).__init__(**kwargs)
 
-        box = FloatLayout(size_hint=(1, 1))
-        self.gauge = Gauge(value=50, size_gauge=256, size_text=24, pos_hint={'x':0.335, 'y':0.25}, size_hint= (1, 1))
-
-        box.add_widget(self.gauge)
-        self.add_widget(box)
-        #Clock.schedule_interval(lambda *t: self.gauge_increment(), 0.1)
         #Clock.schedule_interval(self.cb, 1/10)
 
     # def on_touch_down(self, touch):
@@ -82,18 +76,11 @@ class Dashboard(AnchorLayout):
     def cb(self, *largs):
         print('Hello, World')
 
-    def gauge_increment(self):
-        begin = self.begin
-        begin += self.step * self.increasing
-        if begin > 0 and begin < 100:
-            self.gauge.value = begin
-        else:
-            self.increasing *= -1
-        self.begin = begin
-
 
 class DashboardApp(App):
-    speed = StringProperty()        
+    speed = NumericProperty(0)  
+    regenValue = NumericProperty(0)  
+    regenColor = StringProperty('#00FFFF')        
     def build(self):
         #Clock.schedule_interval(lambda *t: self.gauge_increment(), 0.1)
         print('Building Phantom Dashboard...')
@@ -120,7 +107,7 @@ class DashboardApp(App):
             elif topic == MQTT_TOPICS['BATTERY_TEMPERATURE_TOPIC']:
                 self.setSpeed(data.decode('utf-8'))
             elif topic == MQTT_TOPICS['BATTERY_REGEN_TOPIC']:
-                self.setSpeed(data.decode('utf-8'))
+                self.setRegen(data.decode('utf-8'))
             elif topic == MQTT_TOPICS['VEHICLE_SPEED_TOPIC']:
                 self.setSpeed(data.decode('utf-8'))
             elif topic == MQTT_TOPICS['FAULTS_TOPIC']:
@@ -130,16 +117,25 @@ class DashboardApp(App):
 
         parameters = {'self': self}
 
-        client = mqtt.Client(client_id="kivy-client", clean_session=True, userdata = parameters)
-        client.on_connect = on_connect
-        client.on_message = on_message
+        client = mqtt.Client(client_id="kivy-client", clean_session=True, userdata = parameters) # Initialize client
+        client.on_connect = on_connect # Call this function when client successfully connects
+        client.on_message = on_message # Call this function when message is received on a subscribed topic
 
-        client.connect("localhost", 1883, 60)
+        client.connect("localhost", 1883, 60) # Connect to the local MQTT broker
 
-        client.loop_start()
+        client.loop_start() # Start the MQTT Client
+ 
+    # Sets the speed variable in vehicleSpeed.kv
+    def setSpeed(self, speedValue):
+        self.speed = int(speedValue)
 
-    def setSpeed(self, speed):
-        self.dashboard.gauge.value = int(speed)
+    # Sets the regen variable in Regen.kv and the color based on positivity/negativity of regen
+    def setRegen(self, regen):
+        self.regenValue = float(regen)
+        if float(regen) > 0:
+            self.regenColor = '#00FFFF'
+        else:
+            self.regenColor = '#008000'
 
 
 #backend = backendComms()
