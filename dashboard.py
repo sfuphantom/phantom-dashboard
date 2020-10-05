@@ -1,11 +1,13 @@
 import kivy
+from kivy_garden.speedmeter import SpeedMeter
 kivy.require('1.11.1')
 
 from kivy.app import App
-from kivy.properties import ObjectProperty, StringProperty
+from kivy.properties import ObjectProperty, StringProperty, NumericProperty
 from kivy.uix.label import Label
 from kivy.uix.anchorlayout import AnchorLayout
 from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.textinput import TextInput
 from kivy.uix.widget import Widget
 from kivy.uix.button import Button
@@ -18,6 +20,19 @@ from kivy.uix.relativelayout import RelativeLayout
 
 #from kivy.graphics.vertex_instructions import (Rectangle, Ellipse, Line)
 #from kivy.graphics.context_instructions import Color
+
+import paho.mqtt.client as mqtt
+
+from threading import Thread
+from time import sleep
+
+MQTT_TOPICS = {
+    "BATTERY_VOLTAGE_TOPIC": "events/batteryVoltage",
+    "BATTERY_TEMPERATURE_TOPIC": "events/batteryTemperature",
+    "VEHICLE_SPEED_TOPIC": "events/vehicleSpeed",
+    "BATTERY_REGEN_TOPIC": "events/batteryRegen",
+    "FAULTS_TOPIC": "events/faults",
+}
 
 #import random
 temp = 10
@@ -58,11 +73,13 @@ class DashBar(AnchorLayout):
 class Dashboard(AnchorLayout):
     dashSize = ObjectProperty()
     test = ObjectProperty()
-    
+    increasing = NumericProperty(1)
+    begin = NumericProperty(50)
+    step = NumericProperty(1) 
     def __init__(self, **kwargs):
         super(Dashboard, self).__init__(**kwargs)
-        #Clock.schedule_interval(self.cb, 1/10)
 
+        #Clock.schedule_interval(self.cb, 1/10)
 
     # def on_touch_down(self, touch):
     #     print(self.parent.size)
@@ -73,10 +90,66 @@ class Dashboard(AnchorLayout):
 
 
 class DashboardApp(App):
+    speed = NumericProperty(0)  
+    regenValue = NumericProperty(0)  
+    regenColor = StringProperty('#00FFFF')        
     def build(self):
+        #Clock.schedule_interval(lambda *t: self.gauge_increment(), 0.1)
         print('Building Phantom Dashboard...')
-        return Dashboard()
+        self.dashboard = Dashboard()
+        return self.dashboard
+
+    def on_start(self):      
+        def on_connect(client, userdata, flags, rc):
+            print("Connected with result code "+str(rc))
+
+            # Subscribing in on_connect() means that if we lose the connection and
+            # reconnect then subscriptions will be renewed.
+            for key in MQTT_TOPICS.keys():
+                client.subscribe(MQTT_TOPICS[key])
+
+        # The callback for when a PUBLISH message is received from the server.
+        def on_message(client, userdata, msg):
+            print(msg.topic+" "+str(msg.payload)) 
+            topic = msg.topic
+            data = msg.payload
+
+            if topic == MQTT_TOPICS['BATTERY_VOLTAGE_TOPIC']:
+                self.setSpeed(data.decode('utf-8'))
+            elif topic == MQTT_TOPICS['BATTERY_TEMPERATURE_TOPIC']:
+                self.setSpeed(data.decode('utf-8'))
+            elif topic == MQTT_TOPICS['BATTERY_REGEN_TOPIC']:
+                self.setRegen(data.decode('utf-8'))
+            elif topic == MQTT_TOPICS['VEHICLE_SPEED_TOPIC']:
+                self.setSpeed(data.decode('utf-8'))
+            elif topic == MQTT_TOPICS['FAULTS_TOPIC']:
+                self.setSpeed(data.decode('utf-8'))  
+            else:
+                print("Invalid topic " + msg.topic)           
+
+        parameters = {'self': self}
+
+        client = mqtt.Client(client_id="kivy-client", clean_session=True, userdata = parameters) # Initialize client
+        client.on_connect = on_connect # Call this function when client successfully connects
+        client.on_message = on_message # Call this function when message is received on a subscribed topic
+
+        client.connect("localhost", 1883, 60) # Connect to the local MQTT broker
+
+        client.loop_start() # Start the MQTT Client
+ 
+    # Sets the speed variable in vehicleSpeed.kv
+    def setSpeed(self, speedValue):
+        self.speed = int(speedValue)
+
+    # Sets the regen variable in Regen.kv and the color based on positivity/negativity of regen
+    def setRegen(self, regen):
+        self.regenValue = float(regen)
+        if float(regen) > 0:
+            self.regenColor = '#00FFFF'
+        else:
+            self.regenColor = '#008000'
 
 
-if __name__ == '__main__':
-    DashboardApp().run()
+#backend = backendComms()
+if __name__ == "__main__":
+    dashboard = DashboardApp().run()
