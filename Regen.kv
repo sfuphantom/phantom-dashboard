@@ -1,17 +1,21 @@
 #: kivy 1.11.1
+#:import Factory kivy.factory.Factory
 
 <Regen>:
     anchor_x: 'center'
     anchor_y: 'center'
-    BoxLayout:
-        size_hint: (None, None)
-        offset: 100
-        #canvas.before:
-            #Color:
-                #rgba: 1, 1, 1, 1
-            #Line:
-                #width: 2.0
-                #ellipse: (self.x - self.offset/2, self.y, self.width + self.offset, self.height, -90, 90)
-            #Line:
-                #width: 2.0
-                #ellipse: (self.x - self.width/2 - self.offset, self.y - 1.5*self.offset/2, self.width + 3*self.offset, self.height + 1.5*self.offset, -90, 90)
+    FloatLayout:
+        SpeedMeter:
+            size_hint: (0.4, 0.5)
+            pos_hint: {'x':0.50, 'y':0.25}
+            id: fuel
+            start_angle: 150
+            end_angle: 20
+            min: -4
+            max: 10
+            value: app.regenValue
+            tick: 2
+            label_radius_ratio: 0.4
+            #label_icon: 'fuel.png'
+            sectors: (0, app.regenColor, app.regenValue)            
+            needle_color: '#ffff00'
