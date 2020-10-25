@@ -19,6 +19,7 @@ import paho.mqtt.client as mqtt
 
 from threading import Thread
 from time import sleep
+import json
 
 MQTT_TOPICS = {
     "BATTERY_VOLTAGE_TOPIC": "events/batteryVoltage",
@@ -100,18 +101,20 @@ class DashboardApp(App):
         def on_message(client, userdata, msg):
             print(msg.topic+" "+str(msg.payload)) 
             topic = msg.topic
-            data = msg.payload
+            data = json.loads(msg.payload)
 
             if topic == MQTT_TOPICS['BATTERY_VOLTAGE_TOPIC']:
-                self.setSpeed(data.decode('utf-8'))
+                #self.setSpeed(data['data'])
+                pass
             elif topic == MQTT_TOPICS['BATTERY_TEMPERATURE_TOPIC']:
-                self.setSpeed(data.decode('utf-8'))
+                #self.setSpeed(data['data'])
+                pass
             elif topic == MQTT_TOPICS['BATTERY_REGEN_TOPIC']:
-                self.setRegen(data.decode('utf-8'))
+                self.setRegen(data['data'])
             elif topic == MQTT_TOPICS['VEHICLE_SPEED_TOPIC']:
-                self.setSpeed(data.decode('utf-8'))
+                self.setSpeed(data['data'])
             elif topic == MQTT_TOPICS['FAULTS_TOPIC']:
-                self.setSpeed(data.decode('utf-8'))  
+                self.setSpeed(data['data'])  
             else:
                 print("Invalid topic " + msg.topic)           
 

@@ -1,0 +1,18 @@
+db commands
+
+curl -fsSL https://get.docker.com -o get-docker.sh
+sudo sh get-docker.sh 
+sudo docker run hello-world
+python3 -m pip install sqlalchemy
+sudo apt-get install libpq-dev
+python3 -m pip install psycopg2
+
+CREATE
+sudo docker run --name sqlalchemy-orm-psql     -e POSTGRES_PASSWORD=pass     -e POSTGRES_USER=usr     -e POSTGRES_DB=sqlalchemy     -p 5432:5432     -d postgres  
+
+STOP
+sudo docker stop sqlalchemy-orm-psql 
+
+
+DELETE
+sudo docker rm sqlalchemy-orm-psql 
