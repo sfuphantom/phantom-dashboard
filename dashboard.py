@@ -104,10 +104,10 @@ class DashboardApp(App):
             data = json.loads(msg.payload)
 
             if topic == MQTT_TOPICS['BATTERY_VOLTAGE_TOPIC']:
-                #self.setSpeed(data.decode('utf-8'))
+                #self.setSpeed(data['data'])
                 pass
             elif topic == MQTT_TOPICS['BATTERY_TEMPERATURE_TOPIC']:
-                #self.setSpeed(data.decode('utf-8'))
+                #self.setSpeed(data['data'])
                 pass
             elif topic == MQTT_TOPICS['BATTERY_REGEN_TOPIC']:
                 self.setRegen(data['data'])

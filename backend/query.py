@@ -6,6 +6,7 @@ from datetime import date
 from base import Session, engine, Base
 from recordTypes import Dashboard_DAQ
 
+# Inserts record in the database, requires database to be created
 def insertRecord(location, dashboardName, sensorType, value):
 	# 2 - generate database schema
 	Base.metadata.create_all(engine)

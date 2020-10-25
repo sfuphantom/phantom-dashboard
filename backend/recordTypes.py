@@ -1,20 +1,20 @@
-from sqlalchemy import Column, String, Integer, Date, PickleType, Text, cast, DateTime
-from sqlalchemy.dialects.postgresql import ARRAY, array, JSONB, TIMESTAMP
+from sqlalchemy import Column, String, Integer, DateTime
+from sqlalchemy.dialects.postgresql import JSONB
 
 from base import Base
 import datetime
 
 class Dashboard_DAQ(Base):
     """
-    ipAddr: String (Primary Key), IP Address of eWEB site
-    partnerName: String, Name of Partner where site is
-    totalIterations: Integer, How many iterations Model will run through
-    taggedObjects: JSON (Object Name: Label), User-labelled objects
-    untaggedObjects: Array of Strings, All objects from site
-    model: Pickle of autoTaggingModel Class
-    predicted: JSON (Object Name: Predicted Label)
-    state: String, State of model
-    labeledTokens: JSON (Token Name: Label)
+    This class defines the schema of the record that is stored in the database
+
+    id: Integer (Primary Key), Incremented index (auto-generated)
+    sampleTime: DateTime, timestamp of sensor reading
+    location: String, where car was run
+    dashboardName: String, which raspberry pi was used
+    sensorType: String, Type of sensor
+    value: JSONB, data collected from sensor, JSONB allows you
+    to use column for different data formats
     """
     __tablename__ = 'Dashboard_DAQ'
 
