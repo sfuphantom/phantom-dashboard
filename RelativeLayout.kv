@@ -1,0 +1,32 @@
+
+RelativeLayout
+    size_hint: None, None
+    size: 500, 500
+    pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+
+    canvas:
+        Color:
+            rgba: 1, 1, 1, 0.3
+        Rectangle:
+            pos: 0, 0
+            size: self.size
+
+    MyButton
+        pos_hint: {'left': 1, 'top': 1}
+        text: 'top left'
+
+    MyButton
+        pos_hint: {'right': 1, 'top': 1}
+        text: 'top right'
+
+    MyButton
+        pos_hint: {'left': 1, 'bottom': 1}
+        text: 'bottom left'
+
+    MyButton
+        pos_hint: {'right': 1, 'bottom': 1}
+        text: 'bottom right'
+
+<MyButton@Button>
+    size_hint: None, None
+    size: 100, 100

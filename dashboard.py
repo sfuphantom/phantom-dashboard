@@ -14,6 +14,12 @@ from kivy.uix.button import Button
 from kivy.clock import Clock
 from kivy.graphics import Rectangle, Color
 from kivy.uix.popup import Popup
+from kivy.animation import Animation
+from kivy.clock import Clock
+from kivy.uix.relativelayout import RelativeLayout  
+
+#from kivy.graphics.vertex_instructions import (Rectangle, Ellipse, Line)
+#from kivy.graphics.context_instructions import Color
 
 import paho.mqtt.client as mqtt
 
@@ -29,8 +35,14 @@ MQTT_TOPICS = {
     "FAULTS_TOPIC": "events/faults",
 }
 
+#import random
+temp = 10
+
 class BatteryTemp(AnchorLayout):
-    pass
+    def animate_the_button(self, widget, *args):
+       anim = Animation(opacity=0)
+       if temp < 20:
+           anim.start(widget)
 
 class BatteryVolt(AnchorLayout):
     pass

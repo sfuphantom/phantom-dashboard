@@ -1,0 +1,29 @@
+#: kivy 1.11.1
+#:import hex kivy.utils.get_color_from_hex
+
+<MainWidget>:
+    BoxLayout:
+        Button:
+            background_color: (1, 0, 0, 1)
+            on_release:
+                app.animate_the_button(self)
+        Button:
+            background_color: (1, 0, 0, 1)
+            on_release:
+                app.animate_the_button(self)
+        Button:
+            background_color: hex('#fcf403')
+            on_release:
+                app.animate_the_button(self)
+        Button:
+            background_color: hex('#fcf403')
+            on_release:
+                app.animate_the_button(self)
+        Button:
+            background_color: (0, 1, 0, 1)
+            on_release:
+                app.animate_the_button(self)
+        Button:
+            background_color: (0, 1, 0, 1)
+            on_release:
+                app.animate_the_button(self)
