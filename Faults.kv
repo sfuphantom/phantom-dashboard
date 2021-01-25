@@ -10,13 +10,37 @@
             text: 'FAULTS'
         GridLayout:
             cols: 3
+            BoxLayout:
+                orientation: 'vertical'
+                Button:
+                    text: 'IMD Fault Button'
+                    background_color: 0, .5, 0, 153
+                Label:
+                    background_color: 1, 0, 0, 1
+                    font_size: '20sp'
+                    text: 'IMD'
+            BoxLayout:
+                orientation: 'vertical'
+                canvas:
+                    Color:
+                        rgba: 0, .5, 0, 1
+                    Line:
+                        width: 30.
+                        circle:
+                            (self.center_x, self.center_y, 1)
+                Label:
+                    background_color: 1, 1, 1, 1
+                    font_size: '20sp'
+                    text: 'BMS'
+            BoxLayout:
+                orientation: 'vertical'
+                Button:
+                    text: 'Other Faults Button'
+                    background_color: 1, 0, 0, 1
+                Label:
+                    background_color: 1, 0, 0, 1
+                    font_size: '20sp'
+                    text: 'FLT'
+            # this next piece ensures buffer space underneath
             Label:
-                background_color: 1, 0, 0, 1
-                font_size: '20sp'
-                text: 'IMD'
-            Label:
-                text: 'BMS'
-            Label:
-                text: 'FLT'
-            Label:
-                text: 'FLT'
+                text: 'FLT'    

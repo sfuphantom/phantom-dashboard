@@ -81,7 +81,8 @@ class Dashboard(AnchorLayout):
 class DashboardApp(App):
     speed = NumericProperty(0)  
     regenValue = NumericProperty(0)  
-    regenColor = StringProperty('#00FFFF')        
+    regenColor = StringProperty('#00FFFF') 
+    faultType = StringProperty("")     
     def build(self):
         #Clock.schedule_interval(lambda *t: self.gauge_increment(), 0.1)
         print('Building Phantom Dashboard...')
@@ -114,7 +115,7 @@ class DashboardApp(App):
             elif topic == MQTT_TOPICS['VEHICLE_SPEED_TOPIC']:
                 self.setSpeed(data['data'])
             elif topic == MQTT_TOPICS['FAULTS_TOPIC']:
-                self.setSpeed(data['data'])  
+                self.setFaults(data['data'])  
             else:
                 print("Invalid topic " + msg.topic)           
 
@@ -140,6 +141,9 @@ class DashboardApp(App):
         else:
             self.regenColor = '#008000'
 
+    # Sets the faults variable in Faults.kv
+    def setFaults(self, faults):
+        self.faultType = string(faults)
 
 #backend = backendComms()
 if __name__ == "__main__":
