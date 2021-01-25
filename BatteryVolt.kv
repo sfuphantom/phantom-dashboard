@@ -3,18 +3,26 @@
 <BatteryVolt>:
     anchor_x: 'right'
     anchor_y: 'top'
-    padding: [10, 0]
-    BoxLayout: 
-        orientation: 'vertical'
-        size_hint: (None, None)
-        canvas.before:
-            Color:
-                rgba: 1, 1, 1, 1
-            Line:
-                width: 2.0 
-                rectangle: self.x - self.width - 50, self.y, 250, 75
-        BoxLayout:
-            Label: 
-                size: self.texture_size
-                pos_hint: {'x': 0.8, 'y': -0.70}
-                text: 'BATT. VOLT.'
+    FloatLayout:
+        SpeedMeter:
+            size_hint: (0.3, 0.5)
+            pos_hint: {'x':0.7, 'y':0.7}
+            id: temperature
+            min: 140
+            max: 170
+            tick: 5
+            start_angle: 90
+            end_angle: 270
+            #needle_image: 'needle3.png'
+            #label_icon: 'temp.png'
+            label_icon_scale: 0.35
+            label_radius_ratio: 0.35
+            cadran_color: '#000000'
+            sectors: [140, '##00FF00', 144, '#ffff00', 156, '#ff0000', 170]
+            #on_touch_move: app.set_temp(*args)
+            value: app.voltage
+            label: 'V'
+        Label: 
+            size: self.texture_size
+            pos_hint: {'x': 0.25, 'y': 0.47}
+            text: 'BATT. VOLT.'

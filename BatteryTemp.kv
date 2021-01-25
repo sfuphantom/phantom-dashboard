@@ -4,35 +4,26 @@
 <BatteryTemp>:
     anchor_x: 'left'
     anchor_y: 'top'
-    padding: [10, 0]
-    BoxLayout: 
-        orientation: 'vertical'
-        size_hint: (None, None)
-        canvas.before:                
-            Line:
-                width: 2.0 
-                rectangle: self.x, self.y, 250, 75
-        Button:
-            background_color: (1, 0, 0, 1)
-            on_release:
-                root.animate_the_button(self)
-        Button:
-            background_color: (1, 0, 0, 1)
-            on_release:
-                root.animate_the_button(self)
-        Button:
-            background_color: hex('#fcf403')
-            on_release:
-                root.animate_the_button(self)
-        Button:
-            background_color: hex('#fcf403')
-            on_release:
-                root.animate_the_button(self)
-        Button:
-            background_color: (0, 1, 0, 1)
-            on_release:
-                root.animate_the_button(self)
-        Button:
-            background_color: (0, 1, 0, 1)
-            on_release:
-                root.animate_the_button(self)
+    FloatLayout:
+        SpeedMeter:
+            size_hint: (0.3, 0.5)
+            pos_hint: {'x':0.0, 'y':0.7}
+            id: temperature
+            min: 15
+            max: 70
+            tick: 5
+            start_angle: 90
+            end_angle: 270
+            #needle_image: 'needle3.png'
+            #label_icon: 'temp.png'
+            label_icon_scale: 0.35
+            label_radius_ratio: 0.35
+            cadran_color: '#000000'
+            sectors: [15, '##00FF00', 35, '#ffff00', 60, '#ff0000', 70]
+            #on_touch_move: app.set_temp(*args)
+            value: app.temperature
+            label: '°C'
+        Label: 
+            size: self.texture_size
+            pos_hint: {'x': -0.43, 'y': 0.47}
+            text: 'BATT. TEMP.'

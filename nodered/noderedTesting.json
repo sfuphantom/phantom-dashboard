@@ -1,0 +1,114 @@
+[
+    {
+        "id": "f670ccf9.a17f8",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "b07c35e7.0352b",
+        "type": "ui_slider",
+        "z": "f670ccf9.a17f8",
+        "name": "Vehicle Speed",
+        "label": "Vehicle Speed",
+        "tooltip": "",
+        "group": "912bde4b.4ce508",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "outs": "all",
+        "topic": "events/vehicleSpeed",
+        "min": 0,
+        "max": "100",
+        "step": 1,
+        "x": 560,
+        "y": 240,
+        "wires": [
+            [
+                "adcbdca4.3ddbc8"
+            ]
+        ]
+    },
+    {
+        "id": "adcbdca4.3ddbc8",
+        "type": "mqtt out",
+        "z": "f670ccf9.a17f8",
+        "name": "",
+        "topic": "",
+        "qos": "",
+        "retain": "",
+        "broker": "5af4b09f.96d67",
+        "x": 790,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "f3afec14.979588",
+        "type": "ui_slider",
+        "z": "f670ccf9.a17f8",
+        "name": "Regen",
+        "label": "Regen",
+        "tooltip": "",
+        "group": "912bde4b.4ce508",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "outs": "all",
+        "topic": "events/batteryRegen",
+        "min": "-4",
+        "max": "10",
+        "step": "0.5",
+        "x": 590,
+        "y": 280,
+        "wires": [
+            [
+                "adcbdca4.3ddbc8"
+            ]
+        ]
+    },
+    {
+        "id": "912bde4b.4ce508",
+        "type": "ui_group",
+        "z": "",
+        "name": "Default",
+        "tab": "2888b93c.f2f37e",
+        "order": 1,
+        "disp": true,
+        "width": "6",
+        "collapse": false
+    },
+    {
+        "id": "5af4b09f.96d67",
+        "type": "mqtt-broker",
+        "z": "",
+        "name": "",
+        "broker": "localhost",
+        "port": "1883",
+        "clientid": "",
+        "usetls": false,
+        "compatmode": false,
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": ""
+    },
+    {
+        "id": "2888b93c.f2f37e",
+        "type": "ui_tab",
+        "z": "",
+        "name": "Home",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    }
+]
