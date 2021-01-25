@@ -21,7 +21,10 @@ from kivy.uix.relativelayout import RelativeLayout
 #from kivy.graphics.vertex_instructions import (Rectangle, Ellipse, Line)
 #from kivy.graphics.context_instructions import Color
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 0b4233410dd86fcd792e2d51f4bbda6a7f6e890f
 import paho.mqtt.client as mqtt
 
 from threading import Thread
@@ -35,6 +38,12 @@ MQTT_TOPICS = {
     "BATTERY_REGEN_TOPIC": "events/batteryRegen",
     "FAULTS_TOPIC": "events/faults",
 }
+<<<<<<< HEAD
+=======
+
+#import random
+temp = 10
+>>>>>>> 0b4233410dd86fcd792e2d51f4bbda6a7f6e890f
 
 class BatteryTemp(AnchorLayout):
     def animate_the_button(self, widget, *args):
