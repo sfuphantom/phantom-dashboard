@@ -12,35 +12,43 @@
             cols: 3
             BoxLayout:
                 orientation: 'vertical'
-                Button:
-                    text: 'IMD Fault Button'
-                    background_color: 0, .5, 0, 153
-                Label:
-                    background_color: 1, 0, 0, 1
-                    font_size: '20sp'
-                    text: 'IMD'
-            BoxLayout:
-                orientation: 'vertical'
                 canvas:
                     Color:
-                        rgba: 0, .5, 0, 1
+                        rgba: 1, 0, 0, .8
                     Line:
                         width: 30.
                         circle:
                             (self.center_x, self.center_y, 1)
                 Label:
-                    background_color: 1, 1, 1, 1
                     font_size: '20sp'
-                    text: 'BMS'
+                    text: 'IMD'
+                    color: 1, 1, 1, 1
             BoxLayout:
                 orientation: 'vertical'
-                Button:
-                    text: 'Other Faults Button'
-                    background_color: 1, 0, 0, 1
+                canvas:
+                    Color:
+                        rgba: 0, 0, 0, 0
+                    Line:
+                        width: 30.
+                        circle:
+                            (self.center_x, self.center_y, 1)
                 Label:
-                    background_color: 1, 0, 0, 1
+                    font_size: '20sp'
+                    text: 'BMS'
+                    color: 0, 1, 0, .5
+            BoxLayout:
+                orientation: 'vertical'
+                canvas:
+                    Color:
+                        rgba: 0, 0, 0, .5
+                    Line:
+                        width: 30.
+                        circle:
+                            (self.center_x, self.center_y, 1)
+                Label:
                     font_size: '20sp'
                     text: 'FLT'
+                    color: 0, 1, 0, .5
             # this next piece ensures buffer space underneath
             Label:
                 text: 'FLT'    
