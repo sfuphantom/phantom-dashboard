@@ -9,6 +9,17 @@ from kivy.uix.anchorlayout import AnchorLayout
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.textinput import TextInput
+from kivy.uix.widget import Widget
+from kivy.uix.button import Button
+from kivy.clock import Clock
+from kivy.graphics import Rectangle, Color
+from kivy.uix.popup import Popup
+from kivy.animation import Animation
+from kivy.clock import Clock
+from kivy.uix.relativelayout import RelativeLayout  
+
+#from kivy.graphics.vertex_instructions import (Rectangle, Ellipse, Line)
+#from kivy.graphics.context_instructions import Color
 
 import paho.mqtt.client as mqtt
 
@@ -23,6 +34,11 @@ MQTT_TOPICS = {
     "BATTERY_REGEN_TOPIC": "events/batteryRegen",
     "FAULTS_TOPIC": "events/faults",
 }
+
+
+#import random
+temp = 10
+
 
 class BatteryTemp(AnchorLayout):
     pass
