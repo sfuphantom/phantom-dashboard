@@ -9,22 +9,7 @@ from kivy.uix.anchorlayout import AnchorLayout
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.textinput import TextInput
-from kivy.uix.widget import Widget
-from kivy.uix.button import Button
-from kivy.clock import Clock
-from kivy.graphics import Rectangle, Color
-from kivy.uix.popup import Popup
-from kivy.animation import Animation
-from kivy.clock import Clock
-from kivy.uix.relativelayout import RelativeLayout  
 
-#from kivy.graphics.vertex_instructions import (Rectangle, Ellipse, Line)
-#from kivy.graphics.context_instructions import Color
-
-<<<<<<< HEAD
-
-=======
->>>>>>> 0b4233410dd86fcd792e2d51f4bbda6a7f6e890f
 import paho.mqtt.client as mqtt
 
 from threading import Thread
@@ -38,18 +23,9 @@ MQTT_TOPICS = {
     "BATTERY_REGEN_TOPIC": "events/batteryRegen",
     "FAULTS_TOPIC": "events/faults",
 }
-<<<<<<< HEAD
-=======
-
-#import random
-temp = 10
->>>>>>> 0b4233410dd86fcd792e2d51f4bbda6a7f6e890f
 
 class BatteryTemp(AnchorLayout):
-    def animate_the_button(self, widget, *args):
-       anim = Animation(opacity=0)
-       if temp < 20:
-           anim.start(widget)
+    pass
 
 class BatteryVolt(AnchorLayout):
     pass
@@ -76,7 +52,6 @@ class DashBar(AnchorLayout):
             size=(400, 400),
             content=popup)
         popup_window.open()
-
 
 class Dashboard(AnchorLayout):
     dashSize = ObjectProperty()
