@@ -2,10 +2,12 @@
 #:import Gauge kivy.garden.gauge
 
 <VehicleSpeed>:
+    anchor_x: 'center'
+    anchor_y: 'center'
     FloatLayout:
 	    SpeedMeter:
-	    	size_hint: (0.3, 0.5)
-	    	pos_hint: {'x':0.15, 'y':0.25}
+	    	size_hint: (0.45, 0.45)
+	    	pos_hint: {'x':0.04, 'y':0.2}
 	    	#pos: (10,20)
 	        id: speed
 	        max: 120
@@ -13,8 +15,13 @@
 	        start_angle: -120
 	        end_angle: 120
 	        subtick: 5
-	        label: 'Km/h'
 	        value: app.speed
 	        cadran_color: '#0f0f0f'
 	        needle_color: '#ff0000'
 	        sectors: (0, '#ffffff')
+	    Label: 
+            font_size: '23sp'
+            size: self.texture_size
+            text: 'Km/h'
+            color: 0, 0, 0, 1
+            pos_hint: {'x':-0.23, 'y':0.0}

@@ -6,11 +6,11 @@
     anchor_y: 'top'
     FloatLayout:
         SpeedMeter:
-            size_hint: (0.3, 0.5)
-            pos_hint: {'x':0.0, 'y':0.7}
+            size_hint: (0.5, 0.5)
+            pos_hint: {'x':0.01, 'y':0.68}
             id: temperature
             min: 15
-            max: 70
+            max: 80
             tick: 5
             start_angle: 90
             end_angle: 270
@@ -19,11 +19,17 @@
             label_icon_scale: 0.35
             label_radius_ratio: 0.35
             cadran_color: '#000000'
-            sectors: [15, '##00FF00', 35, '#ffff00', 60, '#ff0000', 70]
+            sectors: [15, '##00FF00', 35, '#ffff00', 60, '#ff0000', 80]
             #on_touch_move: app.set_temp(*args)
             value: app.temperature
-            label: '°C'
         Label: 
+            font_size: '23sp'
             size: self.texture_size
-            pos_hint: {'x': -0.43, 'y': 0.47}
-            text: 'BATT. TEMP.'
+            pos_hint: {'x': -0.24, 'y': 0.47}
+            text: 'BATTERY TEMPERATURE'
+        Label: 
+            font_size: '23sp'
+            size: self.texture_size
+            pos_hint: {'x': -0.24, 'y': 0.32}
+            text: '°C'
+            color: 0, 0, 0, 1
