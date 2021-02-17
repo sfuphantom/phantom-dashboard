@@ -96,6 +96,12 @@ class vehicleCommsManager():
         insertRecord('Test Bench', 'Mahmouds Pi', 'Thermistor Board', data)
         self.client.publish(MQTT_PUB_TOPICS['BATTERY_TEMPERATURE_TOPIC'], payload=data, qos=2, retain=False)
 
+    #Sends message to front-end to set fault and saves data in database
+    def setFaults(self, fault):
+        data = json.dumps({'data': fault});
+        insertRecord('Test Bench', 'Mahmouds Pi', 'Fault', data)
+        self.client.publish(MQTT_PUB_TOPICS['FAULTS_TOPIC'], payload=data, qos=2, retain=False)
+        
     # Idle process...
     def process(self):
         time.sleep(5)

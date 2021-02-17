@@ -82,7 +82,18 @@ class DashboardApp(App):
     speed = NumericProperty(0)  
     regenValue = NumericProperty(0)  
     regenColor = StringProperty('#00FFFF') 
-    faultType = StringProperty("")     
+    faultType = NumericProperty(0)
+    defaulttext = 0, 1, 0, .5
+    defaultbackground = 0, 0, 0, 1
+    faulttext = 1, 1, 1, 1
+    faultcolor = 1, 0, 0, 1
+    imdcolor = defaultbackground
+    imdtext = defaulttext
+    bmscolor = defaultbackground
+    bmstext = defaulttext
+    othercolor = defaultbackground
+    othertext = defaulttext
+    
     def build(self):
         #Clock.schedule_interval(lambda *t: self.gauge_increment(), 0.1)
         print('Building Phantom Dashboard...')
@@ -115,7 +126,8 @@ class DashboardApp(App):
             elif topic == MQTT_TOPICS['VEHICLE_SPEED_TOPIC']:
                 self.setSpeed(data['data'])
             elif topic == MQTT_TOPICS['FAULTS_TOPIC']:
-                self.setFaults(data['data'])  
+     #           self.setFaults(data['data'])  
+                pass
             else:
                 print("Invalid topic " + msg.topic)           
 
@@ -142,8 +154,23 @@ class DashboardApp(App):
             self.regenColor = '#008000'
 
     # Sets the faults variable in Faults.kv
-    def setFaults(self, faults):
-        self.faultType = string(faults)
+    def setFaults(self, fault):
+  #      if  string(fault) == 'null' :
+  #          imdcolor = defaultbackground
+  #          imdtext = defaulttext
+  #          bmscolor = defaultbackground
+  #          bmstext = defaulttext
+  #          othercolor = defaultbackground
+  #          othertext = defaulttext
+        if int(fault) == 1 :
+            imdcolor = faultcolor
+            imdtext = faulttext
+        elif int(fault) == 2 :
+           bmscolor = faultcolor
+           bmstext = faulttext
+        elif int(fault) == 3 :
+           othercolor = faultcolor
+           othertext = faulttext
 
 #backend = backendComms()
 if __name__ == "__main__":
