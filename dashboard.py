@@ -126,8 +126,7 @@ class DashboardApp(App):
             elif topic == MQTT_TOPICS['VEHICLE_SPEED_TOPIC']:
                 self.setSpeed(data['data'])
             elif topic == MQTT_TOPICS['FAULTS_TOPIC']:
-     #           self.setFaults(data['data'])  
-                pass
+                self.setFaults(data['data'])  
             else:
                 print("Invalid topic " + msg.topic)           
 
@@ -166,11 +165,11 @@ class DashboardApp(App):
             imdcolor = faultcolor
             imdtext = faulttext
         elif int(fault) == 2 :
-           bmscolor = faultcolor
-           bmstext = faulttext
+            bmscolor = faultcolor
+            bmstext = faulttext
         elif int(fault) == 3 :
-           othercolor = faultcolor
-           othertext = faulttext
+            othercolor = faultcolor
+            othertext = faulttext
 
 #backend = backendComms()
 if __name__ == "__main__":
