@@ -122,6 +122,14 @@ In another terminal, run `mosquitto_pub -m "message from mosquitto_pub client" -
 
 The backend will be a python application that communicates with the Vehicular Computer Unit and the Battery Management System over Controller Area Network (CAN) to receive data about battery level, faults, speed, regen, etc. It will receive that data, process it, and then publish the data to their unique topics such as vehicleSpeed, batteryRegen, batteryVoltage, etc.
 
+There is a PostgreSQL database running on the Raspberry Pi that stores sensor readings such as battery voltages, temperatures, vehicle speed, etc. for future analysis. The main reason PostgreSQL was selected was because of its easy integrations available in Python as well as its support for JSON. With the value field being in JSON, the database takes on a NoSQL structure to allow flexibility in setting that field depending on what kind of sensor is being recorded.
+
+SQLAlchemy was used in python to define the table structure and perform queries on the database. The main script would now subscribe to the MQTT topics and await messages containing sensor data to be recorded. SQLWorkbench(https://www.sql-workbench.eu/Workbench-Build127-with-optional-libs.zip) is used to connect to the database and the postgreSQL database driver can be downloaded here https://jdbc.postgresql.org/download.html.
+
+![Database Schema](https://mkamaleldin.webnode.com/_files/200000073-a24a9a24ab/450/dashboard-db-schema.png)
+![SQLWorkbench](https://mkamaleldin.webnode.com/_files/200000074-a06caa06cc/700/database.PNG)
+![SQLWorkbench connect info](https://i.imgur.com/83K3DQA.png)
+
 **Node-Red**
 
 Node-RED is a programming tool for wiring together hardware devices, APIs and online services in new and interesting ways. It provides a browser-based editor that makes it easy to wire together flows using the wide range of nodes in the palette that can be deployed to its runtime in a single-click. 
